@@ -5,6 +5,7 @@ import com.ltp.server.core.http.parser.HeaderParser;
 import com.ltp.server.core.http.parser.RequestMethodParser;
 import com.ltp.server.core.http.parser.RequestParser;
 import com.ltp.server.core.http.request.HttpRequest;
+import com.ltp.server.core.http.request.ResponseStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class HttpConnection extends Connection {
             final RequestParser requestParser = new RequestParser();
             final HttpRequest request = requestParser.parse(socket);
             final ResponseBuilder responseBuilder = new ResponseBuilder(request, socket);
-            responseBuilder.setCode(200);
+            responseBuilder.setStatus(ResponseStatus.NOT_FOUND);
             responseBuilder.respond();
         } catch (IOException e) {
             throw new RuntimeException(e);
