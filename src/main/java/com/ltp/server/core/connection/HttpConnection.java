@@ -1,5 +1,6 @@
 package com.ltp.server.core.connection;
 
+import com.ltp.server.core.http.ResponseBuilder;
 import com.ltp.server.core.http.parser.HeaderParser;
 import com.ltp.server.core.http.parser.RequestMethodParser;
 import com.ltp.server.core.http.parser.RequestParser;
@@ -22,6 +23,9 @@ public class HttpConnection extends Connection {
         try{
             final RequestParser requestParser = new RequestParser();
             final HttpRequest request = requestParser.parse(socket);
+            final ResponseBuilder responseBuilder = new ResponseBuilder(request, socket);
+            responseBuilder.setCode(200);
+            responseBuilder.respond();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
