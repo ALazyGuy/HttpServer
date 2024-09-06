@@ -1,5 +1,6 @@
 package com.ltp.server.core;
 
+import com.ltp.server.core.connection.ConnectionHolder;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -23,21 +24,7 @@ public class ConnectionHandler {
     public void test() throws IOException {
         while (true) {
             final Socket client = serverSocket.accept();
-            try(final BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                final PrintWriter output = new PrintWriter(client.getOutputStream())) {
-                while (!input.ready()){}
-                System.out.println();
-                while (input.ready()) {
-                    final String line = input.readLine();
-                    System.out.println(line);
-                }
-
-                output.println("HTTP/1.1 200 OK");
-                output.println("Content-Type: text/html");
-                output.println();
-                output.println("<p>Works!</p>");
-                output.flush();
-            }
+            ConnectionHolder.accept(client);
         }
     }
 
