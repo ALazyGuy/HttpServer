@@ -11,6 +11,7 @@ public class ConnectionThread implements Runnable {
     @Override
     public void run(){
         try{
+            ConnectionHolder.associateThread(id);
             connection.perform();
         }catch (Exception e) {
             System.err.println(e.getMessage());

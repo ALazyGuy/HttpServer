@@ -2,11 +2,13 @@ package com.ltp.server.core.connection;
 
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ConnectionHolder {
-    private static final Map<String, Connection> connections = new HashMap<>();
+    private static final Map<String, Connection> connections = new ConcurrentHashMap<>();
+    private static final Map<Long, String> threads = new ConcurrentHashMap<>();
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     public static void accept(final Socket socket) {
@@ -19,6 +21,22 @@ public class ConnectionHolder {
     public static synchronized void removeSelf(final String id) {
         connections.remove(id);
         System.out.printf("Removed connection %s\n", id);
+    }
+
+    public static synchronized Connection getCurrentConnection() {
+        final String connectionId = threads.get(Thread.currentThread().threadId());
+        if(connectionId == null) {
+            return null;
+        }
+        return connections.get(connectionId);
+    }
+
+    public static synchronized String getCurrentConnectionId() {
+        return threads.get(Thread.currentThread().threadId());
+    }
+
+    public static void associateThread(final String connectionId) {
+        threads.put(Thread.currentThread().threadId(), connectionId);
     }
 
     private static String saveConnection(final Connection connection) {

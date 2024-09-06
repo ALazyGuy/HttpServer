@@ -28,6 +28,7 @@ public class HttpConnection extends Connection {
             output.println();
             output.println("<p>Works!</p>");
             output.flush();
+            System.out.printf("Connection id: %s\n", ConnectionHolder.getCurrentConnectionId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
