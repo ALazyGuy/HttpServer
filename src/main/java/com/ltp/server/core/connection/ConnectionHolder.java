@@ -20,7 +20,6 @@ public class ConnectionHolder {
 
     public static synchronized void removeSelf(final String id) {
         connections.remove(id);
-        System.out.printf("Removed connection %s\n", id);
     }
 
     public static synchronized Connection getCurrentConnection() {
@@ -47,7 +46,6 @@ public class ConnectionHolder {
         } while(connections.containsKey(id));
 
         connections.put(id, connection);
-        System.out.printf("Saved connection: %s\n", id);
         return id;
     }
 
